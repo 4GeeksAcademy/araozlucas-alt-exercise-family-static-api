@@ -48,9 +48,15 @@ def get_member(member_id):
 @app.route('/members', methods=['POST'])
 def add_member():
     response_body = {}
-    body = request.get_json()
+    data = request.json
+    name = data.get('first_name', 'Desconocido')
+    age = data.get('age', 0)
+    numbers = data.get('lucky_numbers', [0])
+    new_data = {'first_name':name,
+                'age':age,
+                'lucky_numbers':numbers}
     response_body['message'] = 'Miembro agregado correctamente'
-    response_body['results'] = jackson_family.add_member(body)
+    response_body['results'] = jackson_family.add_member(new_data)
     if response_body['results']:
         return response_body, 200
     response_body['message'] = 'Error en la peticion, datos invalidos'
