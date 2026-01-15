@@ -47,15 +47,25 @@ def get_member(member_id):
 
 @app.route('/members', methods=['POST'])
 def add_member():
-    response_body = request.get_json()
-    add = jackson_family.add_member(response_body)
-    return add, 200
+    response_body = {}
+    body = request.get_json()
+    response_body['message'] = 'Miembro agregado correctamente'
+    response_body['results'] = jackson_family.add_member(body)
+    if response_body['results']:
+        return response_body, 200
+    response_body['message'] = 'Error en la peticion, datos invalidos'
+    return response_body, 400
 
 
 @app.route('/members/<int:member_id>', methods=['DELETE'])
 def delete_member(member_id):
-    delete_member = jackson_family.delete_member(member_id)
-    return delete_member, 200
+    response_body = {}
+    response_body['message'] = 'Miembro eliminado correctamente'
+    response_body['results'] = jackson_family.delete_member(member_id)
+    if response_body['results']:
+        return response_body, 200
+    response_body['message'] = 'Error en la peticion, id fuera de rango'
+    return response_body, 400
 
 
 # This only runs if `$ python src/app.py` is executed
